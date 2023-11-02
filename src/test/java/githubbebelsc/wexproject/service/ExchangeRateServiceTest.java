@@ -6,23 +6,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 import githubbebelsc.wexproject.model.ExchangeRate;
 
 public class ExchangeRateServiceTest {
     @Mock
     private ExchangeRateService exchangeRateService;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-
-    }
 
     @Test
     void testGetExchangeRates() {
