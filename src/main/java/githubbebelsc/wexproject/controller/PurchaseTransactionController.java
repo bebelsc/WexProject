@@ -4,6 +4,8 @@ import java.sql.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,9 +39,18 @@ public class PurchaseTransactionController {
         return ResponseEntity.ok("Transação adicionada com sucesso. ID: " + savedTransaction.getId());
     }
 
-    @PostMapping("/retrieve")
-    public ResponseEntity<String> getTransaction(@RequestBody Date transactionDate){
-        return ResponseEntity.ok("ok");
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getTransactionById(@PathVariable Long id) {
+        PurchaseTransaction transaction = transactionService.getTransactionById(id);
+
+        if (transaction != null) {
+           return ResponseEntity.ok(transactionService.calculateExchangeRate(transaction));
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
+        
+        
     }
 
 }
