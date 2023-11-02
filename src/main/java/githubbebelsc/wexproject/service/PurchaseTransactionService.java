@@ -1,8 +1,10 @@
 package githubbebelsc.wexproject.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,7 @@ public class PurchaseTransactionService {
         return transactionRepository.findById(id).orElse(null);
     }
 
-    public String calculateExchangeRate(PurchaseTransaction transaction) {
+    public String calculateExchangeRate(PurchaseTransaction transaction, String currency) {
 
         List<ExchangeRate> exchangeRates = new ArrayList<>();
 
@@ -46,12 +48,12 @@ public class PurchaseTransactionService {
         calendar.add(Calendar.MONTH, -6);
         Date endtransactionDate= calendar.getTime();
 
-        exchangeRates=exchangeRateService.getExchangeRates();
+        exchangeRates=exchangeRateService.getExchangeRates(currency);
+        removeExchangeRatesBeforeDate(exchangeRates, endtransactionDate);
 
         double exchangeRate;
         double valorFinal;
         exchangeRate = exchangeRates.get(0).getExchange_rate();
-        System.out.println(exchangeRate);
 
         valorFinal = transaction.getPurchaseAmount()*exchangeRate;
 
@@ -59,4 +61,21 @@ public class PurchaseTransactionService {
 
 
     }
+
+    public void removeExchangeRatesBeforeDate(List<ExchangeRate> exchangeRates, Date endtransactionDate) {
+        // Crie um Calendar para comparar as datas
+        Calendar calendarEnd = Calendar.getInstance();
+        calendarEnd.setTime(endtransactionDate);
+    
+        Iterator<ExchangeRate> iterator = exchangeRates.iterator();
+    
+        while (iterator.hasNext()) {
+            ExchangeRate exchangeRate = iterator.next();
+    
+            if (exchangeRate.getRecord_date().before(calendarEnd.getTime())) {
+                iterator.remove();
+            }
+        }
+    }
+    
 }

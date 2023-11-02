@@ -1,7 +1,5 @@
 package githubbebelsc.wexproject.controller;
 
-import java.sql.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,12 +37,12 @@ public class PurchaseTransactionController {
         return ResponseEntity.ok("Transação adicionada com sucesso. ID: " + savedTransaction.getId());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<String> getTransactionById(@PathVariable Long id) {
+    @GetMapping("/{id}/{currency}")
+    public ResponseEntity<String> getTransactionById(@PathVariable Long id, @PathVariable String currency) {
         PurchaseTransaction transaction = transactionService.getTransactionById(id);
 
         if (transaction != null) {
-           return ResponseEntity.ok(transactionService.calculateExchangeRate(transaction));
+           return ResponseEntity.ok(transactionService.calculateExchangeRate(transaction, currency));
         }
         else{
             return ResponseEntity.notFound().build();

@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -19,10 +20,10 @@ import githubbebelsc.wexproject.model.ExchangeRate;
 @Service
 public class ExchangeRateService {
 
-    public List<ExchangeRate> getExchangeRates() {
+    public List<ExchangeRate> getExchangeRates( String currency) {
         ApiResponse apiResponse = new ApiResponse();
         String apiUrl = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange";
-        String filters = "?filter=currency:eq:Dollar&filter=record_date:gte:2023-09-02";
+        String filters = "?filter=currency:eq:"+currency.toString()+"&sort=-record_date&page[number]=1&page[size]=100";
         String url = apiUrl + filters;
 
         // Crie um cliente HTTP
@@ -43,9 +44,8 @@ public class ExchangeRateService {
 
             List<ExchangeRate> exchangeRates = apiResponse.getData();
 
-            return exchangeRates;
+           return exchangeRates;
         } catch (Exception e) {
-            // Lidar com erros de solicitação ou análise de resposta.
             return Collections.emptyList();
         }
     }
