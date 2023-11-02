@@ -40,26 +40,33 @@ public class PurchaseTransactionService {
 
     public String calculateExchangeRate(PurchaseTransaction transaction, String currency) {
 
-        List<ExchangeRate> exchangeRates = new ArrayList<>();
+        List<ExchangeRate> exchangeRates=exchangeRateService.getExchangeRates(currency);
 
-        Date starttransactionDate = transaction.getTransactionDate();
+        Date endTransactionDate = calculateEndDate(transaction.getTransactionDate());
+        removeExchangeRatesBeforeDate(exchangeRates, endTransactionDate);
+
+        if(exchangeRates.isEmpty()){
+            return "Error";
+        }
+        else{
+            double exchangeRate=exchangeRates.get(0).getExchange_rate();
+            double convertedAmount;
+
+            convertedAmount = transaction.getPurchaseAmount()*exchangeRate;
+
+            return "Description: " + transaction.getDescription() +"\n"
+                    + "Converted Amount: " + convertedAmount +"\n"
+                    + "Transaction Date: " + transaction.getTransactionDate() +"\n"
+                    +"Purchase Amount in Dollars:" + transaction.getPurchaseAmount() +"\n"
+                    +"Conversion Rate: "+ exchangeRate;
+        }
+    }
+
+    private Date calculateEndDate(Date startDate) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(starttransactionDate);
+        calendar.setTime(startDate);
         calendar.add(Calendar.MONTH, -6);
-        Date endtransactionDate= calendar.getTime();
-
-        exchangeRates=exchangeRateService.getExchangeRates(currency);
-        removeExchangeRatesBeforeDate(exchangeRates, endtransactionDate);
-
-        double exchangeRate;
-        double valorFinal;
-        exchangeRate = exchangeRates.get(0).getExchange_rate();
-
-        valorFinal = transaction.getPurchaseAmount()*exchangeRate;
-
-        return "Valor final: " + valorFinal;
-
-
+        return calendar.getTime();
     }
 
     public void removeExchangeRatesBeforeDate(List<ExchangeRate> exchangeRates, Date endtransactionDate) {

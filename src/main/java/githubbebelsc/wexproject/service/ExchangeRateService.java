@@ -26,16 +26,16 @@ public class ExchangeRateService {
         String filters = "?filter=currency:eq:"+currency.toString()+"&sort=-record_date&page[number]=1&page[size]=100";
         String url = apiUrl + filters;
 
-        // Crie um cliente HTTP
+        // Cria um cliente HTTP
         HttpClient client = HttpClient.newHttpClient();
 
-        // Crie uma solicitação HTTP GET
+        // Cria uma solicitação HTTP GET
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
             .build();
 
         try {
-            // Envie a solicitação e receba a resposta
+            // Envia a solicitação e recebe a resposta
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             String responseBody = response.body();
 
