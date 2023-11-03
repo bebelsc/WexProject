@@ -2,7 +2,6 @@ package githubbebelsc.wexproject.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.mockito.Mockito.mock;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -65,7 +64,7 @@ public class PurchaseTransactionServiceTest {
                 "Transaction Date: " + new Date() + "\n" +
                 "Purchase Amount in Dollars: U$100.00\n" +
                 "Conversion Rate: 77.86\n" +
-                "Converted Amount: 778.60";
+                "Converted Amount: 800.00";
 
         assertNotEquals(expected, result);
     }
