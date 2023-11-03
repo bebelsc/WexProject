@@ -1,6 +1,14 @@
 package githubbebelsc.wexproject.model;
 
-import java.sql.Date;
+import java.math.BigDecimal;
+import java.util.Date;
+
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,14 +28,25 @@ public class PurchaseTransaction{
     private Long id;
 
     @Column(name = "description")
+    @Size(max = 50, message = "Description must not exceed 50 characters")
     private String description;
 
     @Column(name = "date")
+    @NotNull(message = "Mandatory field")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date transactionDate;
 
     @Column(name = "amount")
-    private Double purchaseAmount;
+    @Positive(message = "The Amount must be a positive value")
+    @Digits(integer = 10, fraction = 2)
+    private BigDecimal purchaseAmount;
 
+    public BigDecimal getPurchaseAmount() {
+        return purchaseAmount;
+    }
+    public void setPurchaseAmount(BigDecimal purchaseAmount) {
+        this.purchaseAmount = purchaseAmount;
+    }
     public Long getId() {
         return id;
     }
@@ -47,12 +66,7 @@ public class PurchaseTransaction{
     public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
     }
-    public Double getPurchaseAmount() {
-        return purchaseAmount;
-    }
-    public void setPurchaseAmount(Double purchaseAmount) {
-        this.purchaseAmount = purchaseAmount;
-    }
+    
 
 
 

@@ -7,14 +7,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import githubbebelsc.wexproject.model.ExchangeRate;
 
 public class ExchangeRateServiceTest {
-    @Mock
-    private ExchangeRateService exchangeRateService;
+
+    ExchangeRateService exchangeRateService = Mockito.mock(ExchangeRateService.class);
+
 
     @Test
     void testGetExchangeRates() {

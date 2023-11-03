@@ -1,5 +1,7 @@
 package githubbebelsc.wexproject.service;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -36,7 +38,7 @@ public class PurchaseTransactionService {
         return transactionRepository.findById(id).orElse(null);
     }
 
-    public String calculateExchangeRate(PurchaseTransaction transaction, String currency) {
+    public String calculateExchangeRate(PurchaseTransaction transaction, String currency) throws Exception {
 
         List<ExchangeRate> exchangeRates=exchangeRateService.getExchangeRates(currency);
 
@@ -44,19 +46,22 @@ public class PurchaseTransactionService {
         removeExchangeRatesBeforeDate(exchangeRates, endTransactionDate);
 
         if(exchangeRates.isEmpty()){
-            return "Error";
+            throw new Exception("No conversion rate available");
         }
         else{
-            double exchangeRate=exchangeRates.get(0).getExchange_rate();
-            double convertedAmount;
+            BigDecimal exchangeRate= new BigDecimal(exchangeRates.get(0).getExchange_rate());
+            BigDecimal convertedAmount;
+            DecimalFormat df = new DecimalFormat("#.00");
 
-            convertedAmount = transaction.getPurchaseAmount()*exchangeRate;
+            convertedAmount = transaction.getPurchaseAmount().multiply(exchangeRate);
 
-            return "Description: " + transaction.getDescription() +"\n"
-                    + "Converted Amount: " + convertedAmount +"\n"
-                    + "Transaction Date: " + transaction.getTransactionDate() +"\n"
-                    +"Purchase Amount in Dollars:" + transaction.getPurchaseAmount() +"\n"
-                    +"Conversion Rate: "+ exchangeRate;
+            return "Identifier: " + transaction.getId() +"\n"
+                    +"Description: " + transaction.getDescription() +"\n"
+                    +"Transaction Date: " + transaction.getTransactionDate() +"\n"
+                    +"Purchase Amount in Dollars: U$" + transaction.getPurchaseAmount() +"\n"
+                    +"Conversion Rate: "+ df.format(exchangeRate) + "\n"
+                    +"Converted Amount: " + df.format(convertedAmount);   
+                    
         }
     }
 

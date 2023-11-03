@@ -38,7 +38,7 @@ public class PurchaseTransactionController {
     }
 
     @GetMapping("/{id}/{currency}")
-    public ResponseEntity<String> getTransactionById(@PathVariable Long id, @PathVariable String currency) {
+    public ResponseEntity<String> getTransactionById(@PathVariable Long id, @PathVariable String currency) throws Exception {
         PurchaseTransaction transaction = transactionService.getTransactionById(id);
 
         if (transaction != null) {
