@@ -1,6 +1,6 @@
 # WexProject
 
-Add Transaction:
+## Add Transaction:
 Route: POST /api/transactions/add
 Description: This route allows you to add information about a purchase transaction. Transaction details, such as description, date, and purchase amount, are provided in the request body in JSON format. The transaction is recorded in the system, and a unique ID is generated.
 Example of request body:
@@ -15,7 +15,7 @@ Example of successful response:
 
 Transaction added successfully. ID: 1
 
-Get Transaction by ID and Calculate Exchange Rate:
+## Get Transaction by ID and Calculate Exchange Rate:
 Route: GET /api/transactions/{id}/{currency}
 Description: This route allows you to retrieve information about a specific purchase transaction based on its ID. Additionally, you can specify the desired currency (currency) to calculate the converted value of the purchase using the relevant exchange rate.
 Example request:
@@ -34,13 +34,13 @@ In case of success, detailed transaction information, including the exchange rat
 
 If the transaction is not found, the API will return a 404 status (Not Found).
 
-Configuration
+## Configuration
 The API is built based on the Spring Boot framework and uses Java. You need to configure the Java environment and project dependencies to run the API.
 
-Usage
+## Usage
 Make sure the API is up and running, and then use the routes mentioned above to add transactions and calculate exchange rates for existing transactions.
 
-Database
+## Database
 A database was created in MySQL to store the information. To use the database for testing, follow the steps below:
 
 CREATE SCHEMA wex_project;
@@ -54,7 +54,7 @@ CREATE TABLE `transaction` (
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-POSTMAN
+## POSTMAN
 
 POST
 
